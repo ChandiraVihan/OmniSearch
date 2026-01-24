@@ -4,7 +4,7 @@
         Title="OmniSearch"
         WindowStyle="None" 
         AllowsTransparency="True" 
-        Background="#80000000"
+        Background="Transparent" 
         WindowState="Maximized"
         Topmost="True"
         Loaded="Window_Loaded">
