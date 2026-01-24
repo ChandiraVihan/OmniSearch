@@ -9,53 +9,68 @@
         Topmost="True"
         Loaded="Window_Loaded">
     
-    <Grid>
-        <Grid.InputBindings>
-            <MouseBinding MouseAction="LeftClick" Command="{Binding CloseCommand}" />
-        </Grid.InputBindings>
+    <Grid Background="Transparent" MouseDown="BackgroundGrid_MouseDown">
+        
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            
+            <Border Width="700" Height="80" Background="#FF2D2D30" CornerRadius="12" BorderBrush="#555555" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.6"/>
+                </Border.Effect>
+                <Grid>
+                    <TextBox x:Name="SearchInput" 
+                             Background="Transparent" 
+                             Foreground="White" 
+                             BorderThickness="0" 
+                             FontSize="28" 
+                             VerticalContentAlignment="Center" 
+                             Margin="20,0" 
+                             CaretBrush="White" 
+                             TextChanged="SearchInput_TextChanged"
+                             KeyDown="SearchInput_KeyDown"/>
+                    
+                    <TextBlock IsHitTestVisible="False" 
+                               Text="Search apps..." 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" 
+                               Margin="22,0" 
+                               Foreground="#aaaaaa" 
+                               FontSize="28">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchInput}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+            </Border>
 
-        <Border Width="700" Height="80"
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Center"
-                Background="#FF2D2D30" 
-                CornerRadius="12" 
-                BorderBrush="#555555" 
-                BorderThickness="1">
-            
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.6"/>
-            </Border.Effect>
-            
-            <Grid>
-                <TextBox x:Name="SearchInput" 
+            <Border x:Name="ResultsBorder" 
+                    Width="700" 
+                    MaxHeight="400" 
+                    Background="#FF2D2D30" 
+                    CornerRadius="12" 
+                    Margin="0,10,0,0" 
+                    Visibility="Collapsed">
+                <ListBox x:Name="ResultsList" 
                          Background="Transparent" 
-                         Foreground="White" 
                          BorderThickness="0" 
-                         FontSize="28" 
-                         VerticalContentAlignment="Center"
-                         Margin="20,0"
-                         CaretBrush="White"
-                         TextChanged="SearchInput_TextChanged"/>
-                
-                <TextBlock IsHitTestVisible="False" 
-                           Text="Search..." 
-                           VerticalAlignment="Center" 
-                           HorizontalAlignment="Left" 
-                           Margin="22,0" 
-                           Foreground="#aaaaaa" 
-                           FontSize="28">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=SearchInput}" Value="">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-            </Grid>
-        </Border>
+                         Foreground="White" 
+                         FontSize="18" 
+                         Padding="10"
+                         MouseDoubleClick="ResultsList_MouseDoubleClick">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" Padding="5"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </StackPanel>
     </Grid>
 </Window>
