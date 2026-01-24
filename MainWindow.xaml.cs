@@ -1,28 +1,4 @@
-﻿// using System.Text;
-// using System.Windows;
-// using System.Windows.Controls;
-// using System.Windows.Data;
-// using System.Windows.Documents;
-// using System.Windows.Input;
-// using System.Windows.Media;
-// using System.Windows.Media.Imaging;
-// using System.Windows.Navigation;
-// using System.Windows.Shapes;
-
-// namespace OmniSearchApp;
-
-// /// <summary>
-// /// Interaction logic for MainWindow.xaml
-// /// </summary>
-// public partial class MainWindow : Window
-// {
-//     public MainWindow()
-//     {
-//         InitializeComponent();
-//     }
-// }
-
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -33,29 +9,41 @@ namespace OmniSearchApp
         public MainWindow()
         {
             InitializeComponent();
-            // This allows to drag the search bar around with your mouse
-            this.MouseDown += (s, e) => { if (e.LeftButton == MouseButtonState.Pressed) DragMove(); };
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Activate();
+            SearchInput.Focus();
+            Keyboard.Focus(SearchInput);
         }
 
         private void SearchInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string query = SearchInput.Text;
-            // TODO: This trigger the Search Engine later
+            // Search logic will go here
         }
 
-        private void SearchInput_GotFocus(object sender, RoutedEventArgs e)
+        // This handles keys for the whole window
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            // Logic for when the search bar is clicked
+            base.OnKeyDown(e);
+            
+            // ESC closes the app
+            if (e.Key == Key.Escape)
+            {
+                Application.Current.Shutdown();
+            }
         }
 
-     protected override void OnKeyDown(KeyEventArgs e)
-{
-    base.OnKeyDown(e);
-    // Use Key.Escape to close when esc pressed
-    if (e.Key == Key.Escape)
-    {
-        Application.Current.Shutdown();
-    }
-}
+        // Optional: If you want clicking the dark background to close the app
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            // If the user clicked outside the search box (on the window background)
+            if (e.OriginalSource == this.Content || e.OriginalSource is Grid)
+            {
+                Application.Current.Shutdown();
+            }
+        }
     }
 }

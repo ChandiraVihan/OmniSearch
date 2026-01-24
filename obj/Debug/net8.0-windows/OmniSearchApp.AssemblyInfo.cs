@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OmniSearchApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5938541a849cdff263b5341e7532a4c6e7ce53c7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4a305b52fa5d5de1ac14459e21601914dc5c4ee9")]
 [assembly: System.Reflection.AssemblyProductAttribute("OmniSearchApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OmniSearchApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
