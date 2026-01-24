@@ -6,7 +6,6 @@ D:\Advanced Projects\OmniSearch\OmniSearchApp\bin\Debug\net8.0-windows\OmniSearc
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\MainWindow.g.cs
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\App.g.cs
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\OmniSearchApp_MarkupCompile.cache
-D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\OmniSearchApp_MarkupCompile.lref
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\MainWindow.baml
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\OmniSearchApp.g.resources
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\OmniSearchApp.GeneratedMSBuildEditorConfig.editorconfig
@@ -18,3 +17,4 @@ D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\refint\Om
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\OmniSearchApp.pdb
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\OmniSearchApp.genruntimeconfig.cache
 D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\ref\OmniSearchApp.dll
+D:\Advanced Projects\OmniSearch\OmniSearchApp\obj\Debug\net8.0-windows\OmniSearchApp.sourcelink.json
