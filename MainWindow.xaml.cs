@@ -28,11 +28,19 @@ namespace OmniSearchApp
     public partial class MainWindow : Window
     {
         private List<AppItem> startMenuApps = new List<AppItem>();
+        private System.Windows.Threading.DispatcherTimer _searchTimer;
 
         public MainWindow()
         {
+            // InitializeComponent();
+            // LoadStartMenuApps();
             InitializeComponent();
-            LoadStartMenuApps();
+             LoadStartMenuApps();
+
+    // Initialize the timer
+    _searchTimer = new System.Windows.Threading.DispatcherTimer();
+    _searchTimer.Interval = TimeSpan.FromMilliseconds(300); // Wait 300ms
+    _searchTimer.Tick += SearchTimer_Tick;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -91,6 +99,11 @@ namespace OmniSearchApp
 
         private void SearchInput_TextChanged(object sender, TextChangedEventArgs e)
 {
+
+    // Every time the user types, stop the timer and start it again
+    _searchTimer.Stop();
+    _searchTimer.Start();
+
     string query = SearchInput.Text.Trim();
     if (string.IsNullOrWhiteSpace(query)) {
         ResultsBorder.Visibility = Visibility.Collapsed;
@@ -198,6 +211,13 @@ namespace OmniSearchApp
         {
             if (e.Key == Key.Enter) { e.Handled = true; LaunchSelectedApp(); }
         }
+
+        private void SearchTimer_Tick(object? sender, EventArgs e)
+{
+    _searchTimer.Stop(); // Stop so it doesn't loop
+    
+    
+}
 
         private void ResultsList_MouseDoubleClick(object sender, MouseButtonEventArgs e) => LaunchSelectedApp();
         private void BackgroundGrid_MouseDown(object sender, MouseButtonEventArgs e) { if (e.OriginalSource is Grid) Application.Current.Shutdown(); }
