@@ -15,7 +15,7 @@ public static class Database
     static Database()
     {
         var dir = Path.GetDirectoryName(DbPath);
-        if (!Directory.Exists(dir))
+        if (dir != null && !Directory.Exists(dir))
         {
             Directory.CreateDirectory(dir);
         }

@@ -70,6 +70,15 @@
           }
         }
       },
+      "System.Data.SQLite/2.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/System.Data.SQLite.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/System.Data.SQLite.dll": {}
+        }
+      },
       "System.Diagnostics.EventLog/10.0.2": {
         "type": "package",
         "compile": {
@@ -293,6 +302,20 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "System.Data.SQLite/2.0.2": {
+      "sha512": "yAwxkraZf1PazyLg1sqMAlh4KEtaa2L8zieLicd9oWBybrb3SoPph+WVIyUTFWwtTVhNX/jNsDew6tbB8bw2xQ==",
+      "type": "package",
+      "path": "system.data.sqlite/2.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net471/System.Data.SQLite.dll",
+        "lib/netstandard2.0/System.Data.SQLite.dll",
+        "lib/netstandard2.1/System.Data.SQLite.dll",
+        "system.data.sqlite.2.0.2.nupkg.sha512",
+        "system.data.sqlite.nuspec"
+      ]
+    },
     "System.Diagnostics.EventLog/10.0.2": {
       "sha512": "TJPpTLF5MFPobq09c9BQ5X8QuviQfsKvH0Jbm7MkGylGvfIdRqJQLZDPC5sMRFkk9aZhmgir1NJKekip2NxfaA==",
       "type": "package",
@@ -493,6 +516,7 @@
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
       "System.Data.OleDb >= 10.0.2",
+      "System.Data.SQLite >= 2.0.2",
       "System.Drawing.Common >= 10.0.2"
     ]
   },
@@ -541,6 +565,10 @@
           "System.Data.OleDb": {
             "target": "Package",
             "version": "[10.0.2, )"
+          },
+          "System.Data.SQLite": {
+            "target": "Package",
+            "version": "[2.0.2, )"
           },
           "System.Drawing.Common": {
             "target": "Package",

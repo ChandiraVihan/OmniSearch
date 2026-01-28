@@ -9,6 +9,7 @@
       "OmniSearchApp/1.0.0": {
         "dependencies": {
           "System.Data.OleDb": "10.0.2",
+          "System.Data.SQLite": "2.0.2",
           "System.Drawing.Common": "10.0.2"
         },
         "runtime": {
@@ -60,6 +61,14 @@
             "assetType": "runtime",
             "assemblyVersion": "10.0.0.2",
             "fileVersion": "10.0.225.61305"
+          }
+        }
+      },
+      "System.Data.SQLite/2.0.2": {
+        "runtime": {
+          "lib/netstandard2.1/System.Data.SQLite.dll": {
+            "assemblyVersion": "2.0.2.0",
+            "fileVersion": "2.0.2.0"
           }
         }
       },
@@ -176,6 +185,13 @@
       "sha512": "sha512-IsOxcdNcBTVBky0ks3msIQFW/0NazQS4tKddc9OajfwbFXPsaSkVR09657pgnnnu72i9xDvnMx16fLH+7cMXGA==",
       "path": "system.data.oledb/10.0.2",
       "hashPath": "system.data.oledb.10.0.2.nupkg.sha512"
+    },
+    "System.Data.SQLite/2.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yAwxkraZf1PazyLg1sqMAlh4KEtaa2L8zieLicd9oWBybrb3SoPph+WVIyUTFWwtTVhNX/jNsDew6tbB8bw2xQ==",
+      "path": "system.data.sqlite/2.0.2",
+      "hashPath": "system.data.sqlite.2.0.2.nupkg.sha512"
     },
     "System.Diagnostics.EventLog/10.0.2": {
       "type": "package",

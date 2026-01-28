@@ -1,0 +1,23 @@
+<Window x:Class="OmniSearchApp.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Indexed Locations" FontSize="16" FontWeight="Bold" Margin="10"/>
+
+        <ListBox Grid.Row="1" Name="FoldersListBox" Margin="10">
+            <!-- Items will be added from code-behind -->
+        </ListBox>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="Add Folder" Click="AddFolder_Click" Margin="5"/>
+            <Button Content="Remove Folder" Click="RemoveFolder_Click" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>

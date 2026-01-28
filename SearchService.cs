@@ -1,7 +1,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Data.OleDb;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -78,34 +78,36 @@ public class SearchService
                 .Take(5)
         );
 
-        // 3. Windows Search Index
+        // 3. Search the index
+        results.AddRange(SearchFromIndex(query, results));
+
+
+        return results;
+    }
+
+    private IEnumerable<AppItem> SearchFromIndex(string query, List<AppItem> existingResults)
+    {
+        var results = new List<AppItem>();
         try
         {
-            using var connection = new OleDbConnection(
-                "Provider=Search.CollatorDSO;Extended Properties='Application=Windows';");
-
-            connection.Open();
-
-            using var command = new OleDbCommand(
-                @"SELECT TOP 10 System.ItemNameDisplay, System.ItemPathDisplay
-                  FROM SystemIndex
-                  WHERE (System.ItemName LIKE ? OR System.ItemNameDisplay LIKE ?)
-                  AND System.ItemPathDisplay NOT LIKE '%\Packages\%'
-                  AND System.ItemPathDisplay NOT LIKE '%\AppData\Local\Microsoft\%'",
-                connection);
-
-            command.Parameters.AddWithValue("@p1", query + "%");
-            command.Parameters.AddWithValue("@p2", query + "%");
+            using var connection = Database.GetConnection();
+            using var command = connection.CreateCommand();
+            command.CommandText = @"
+                SELECT Name, Path, Type
+                FROM Files
+                WHERE Name LIKE @Query OR Path LIKE @Query
+                LIMIT 20";
+            command.Parameters.AddWithValue("@Query", $"%{query}%");
 
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                var path = reader[1]?.ToString();
-                if (path == null || results.Any(x => x.Path == path)) continue;
+                var path = reader["Path"]?.ToString();
+                if (path == null || existingResults.Any(x => x.Path == path)) continue;
 
                 results.Add(new AppItem
                 {
-                    Name = reader[0]?.ToString(),
+                    Name = reader["Name"]?.ToString(),
                     Path = path,
                     Type = "File",
                     Icon = IconService.GetIcon(path)

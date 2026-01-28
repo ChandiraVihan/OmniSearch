@@ -10,14 +10,16 @@ namespace OmniSearchApp
 {
     public partial class MainWindow : Window
     {
-        private readonly DispatcherTimer _searchTimer;
         private readonly SearchService _searchService;
+        private readonly IndexService _indexService;
+        private readonly DispatcherTimer _searchTimer;
 
         public MainWindow()
         {
             InitializeComponent();
 
             _searchService = new SearchService();
+            _indexService = new IndexService();
 
             _searchTimer = new DispatcherTimer
             {
@@ -26,13 +28,27 @@ namespace OmniSearchApp
             _searchTimer.Tick += SearchTimer_Tick;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             WindowBlur.EnableBlur(this);
             SearchInput.Focus();
             Activate();
-        }
 
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    Dispatcher.Invoke(() => StatusText.Text = "Indexing...");
+                    await _indexService.BuildIndex();
+                    Dispatcher.Invoke(() => StatusText.Text = "Indexing complete.");
+                }
+                catch (Exception ex)
+                {
+                    Dispatcher.Invoke(() => StatusText.Text = $"Indexing error: {ex.Message}");
+                }
+            });
+        }
+        
         private void BackgroundGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.OriginalSource is Grid)
@@ -110,17 +126,25 @@ namespace OmniSearchApp
             }
         }
 
-        protected override void OnPreviewKeyDown(KeyEventArgs e)
-{
-    if (e.Key == Key.Escape)
-    {
-        Application.Current.Shutdown();
-        e.Handled = true;
-        return;
-    }
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow();
+            this.Hide();
+            settingsWindow.ShowDialog();
+            this.Show();
+        }
 
-    base.OnPreviewKeyDown(e);
-}
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Application.Current.Shutdown();
+                e.Handled = true;
+                return;
+            }
+
+            base.OnPreviewKeyDown(e);
+        }
 
     }
 }
