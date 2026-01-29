@@ -7,7 +7,7 @@ public static class Database
     private static readonly string DbPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "OmniSearch",
-        "omniseach.db"
+        "omnisearch.db"
     );
 
     private static readonly string ConnectionString = $"Data Source={DbPath};Version=3;";

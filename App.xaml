@@ -4,6 +4,27 @@
              xmlns:local="clr-namespace:OmniSearchApp"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+    <!-- Global Retro Scrollbar Style -->
+    <Style TargetType="ScrollViewer">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ScrollContentPresenter/>
+                        <ScrollBar x:Name="PART_VerticalScrollBar" 
+                                   Grid.Column="1" 
+                                   Background="#1A1A2E"
+                                   Foreground="#00FF9D"
+                                   BorderBrush="#B024FF"
+                                   BorderThickness="1"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     </Application.Resources>
 </Application>

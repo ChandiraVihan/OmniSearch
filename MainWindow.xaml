@@ -4,39 +4,238 @@
         Title="OmniSearch"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
+        Background="#CC0D0D15"
         WindowState="Maximized"
         Topmost="True"
         Loaded="Window_Loaded">
 
-    <Canvas>
-        <Grid Background="Transparent" MouseDown="BackgroundGrid_MouseDown" Width="{Binding ActualWidth, ElementName=window}" Height="{Binding ActualHeight, ElementName=window}">
+    <Window.Resources>
+        <!-- Neon Glow Effects -->
+        <DropShadowEffect x:Key="NeonGlow" BlurRadius="15" ShadowDepth="0" Color="#00FF9D" Opacity="0.6"/>
+        <DropShadowEffect x:Key="PurpleGlow" BlurRadius="20" ShadowDepth="0" Color="#B024FF" Opacity="0.4"/>
+        
+        <!-- Custom ScrollBar Style -->
+        <Style x:Key="NeonScrollBar" TargetType="ScrollBar">
+            <Setter Property="Background" Value="#0F0F1A"/>
+            <Setter Property="Foreground" Value="#00FF9D"/>
+            <Setter Property="BorderBrush" Value="#B024FF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Track x:Name="PART_Track" IsDirectionReversed="true">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.LineUpCommand" Opacity="0"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.LineDownCommand" Opacity="0"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Background="#00FF9D" BorderBrush="#B024FF" BorderThickness="1">
+                                        <Thumb.Style>
+                                            <Style TargetType="Thumb">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Thumb">
+                                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="2"/>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Thumb.Style>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <!-- ListBox Style -->
+        <Style x:Key="RetroListBox" TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
 
-                <Border Width="700" Height="80" Background="#FF2D2D30" CornerRadius="12" BorderBrush="#555555" BorderThickness="1">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.6"/>
-                    </Border.Effect>
-                    <Grid>
+        <!-- ListBoxItem Style -->
+        <Style x:Key="RetroListItem" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="Border" Background="Transparent" CornerRadius="2" Padding="8">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#3300FF9D"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#00FF9D"/>
+                                <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#22B024FF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid MouseDown="BackgroundGrid_MouseDown">
+        <!-- Background -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#0D0D15" Offset="0"/>
+                <GradientStop Color="#1A1A2E" Offset="0.5"/>
+                <GradientStop Color="#0D0D15" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Scanlines -->
+        <Grid Opacity="0.03">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,4" SpreadMethod="Repeat">
+                    <GradientStop Color="#000000" Offset="0"/>
+                    <GradientStop Color="#000000" Offset="0.5"/>
+                    <GradientStop Color="#FFFFFF" Offset="0.5"/>
+                    <GradientStop Color="#FFFFFF" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+        </Grid>
+
+        <!-- Settings Button (Top Right) -->
+        <Button x:Name="SettingsBtn"
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Top"
+                Margin="0,20,20,0"
+                Click="SettingsButton_Click"
+                Width="40" 
+                Height="40"
+                Background="Transparent"
+                BorderBrush="#B024FF"
+                BorderThickness="1"
+                FontFamily="Consolas"
+                FontSize="16"
+                Foreground="#00FF9D"
+                Content="⚙"
+                Cursor="Hand">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="10" Color="#B024FF" ShadowDepth="0" Opacity="0.5"/>
+            </Button.Effect>
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#15B024FF"/>
+                            <Setter Property="Foreground" Value="#FFFFFF"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <!-- Main Content -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="800">
+            
+            <!-- Pixelated Header -->
+            <StackPanel Orientation="Horizontal" Margin="10,0,0,20">
+                <TextBlock Text="OMNI_SEARCH" 
+                           FontFamily="Consolas" 
+                           FontSize="48"
+                           FontWeight="ExtraBold"
+                           TextOptions.TextHintingMode="Fixed"
+                           TextOptions.TextFormattingMode="Display"
+                           TextOptions.TextRenderingMode="Aliased"
+                           RenderOptions.BitmapScalingMode="NearestNeighbor"
+                           RenderOptions.EdgeMode="Aliased">
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#00FF9D" Offset="0"/>
+                            <GradientStop Color="#00D4FF" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground>
+                    <TextBlock.Effect>
+                        <!-- Hard pixel shadow for 8-bit look -->
+                        <DropShadowEffect BlurRadius="0" ShadowDepth="4" Direction="270" Color="#B024FF" Opacity="0.9"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                
+                <TextBlock Text="" 
+                           FontFamily="Consolas" 
+                           FontSize="20" 
+                           FontWeight="Bold"
+                           Foreground="#666677" 
+                           Margin="8,10,0,0"
+                           TextOptions.TextRenderingMode="Aliased"
+                           Opacity="0.7"/>
+            </StackPanel>
+
+            <!-- Search Box -->
+            <Border Height="80" Background="#CC1A1A2E" BorderBrush="#00FF9D" BorderThickness="2" CornerRadius="4" Effect="{StaticResource PurpleGlow}">
+                <Grid>
+                    <!-- Corners -->
+                    <Path Data="M0,0 L15,0 L15,2 L2,2 L2,15 L0,15 Z" Fill="#00FF9D" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4"/>
+                    <Path Data="M0,0 L15,0 L15,2 L2,2 L2,15 L0,15 Z" Fill="#00FF9D" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="4" RenderTransformOrigin="0.5,0.5">
+                        <Path.RenderTransform><RotateTransform Angle="90"/></Path.RenderTransform>
+                    </Path>
+                    <Path Data="M0,0 L15,0 L15,2 L2,2 L2,15 L0,15 Z" Fill="#00FF9D" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="4" RenderTransformOrigin="0.5,0.5">
+                        <Path.RenderTransform><RotateTransform Angle="-90"/></Path.RenderTransform>
+                    </Path>
+                    <Path Data="M0,0 L15,0 L15,2 L2,2 L2,15 L0,15 Z" Fill="#00FF9D" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4" RenderTransformOrigin="0.5,0.5">
+                        <Path.RenderTransform><RotateTransform Angle="180"/></Path.RenderTransform>
+                    </Path>
+
+                    <!-- Input Grid -->
+                    <Grid Margin="20,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text=">" FontFamily="Consolas" FontSize="32" Foreground="#00FF9D" VerticalAlignment="Center" Margin="0,0,15,0" Opacity="0.8"/>
+
                         <TextBox x:Name="SearchInput"
+                                 Grid.Column="1"
                                  Background="Transparent"
-                                 Foreground="White"
                                  BorderThickness="0"
-                                 FontSize="28"
+                                 FontFamily="Consolas, Courier New, monospace"
+                                 FontSize="32"
+                                 Foreground="#00FF9D"
+                                 VerticalAlignment="Center"
                                  VerticalContentAlignment="Center"
-                                 Margin="20,0"
-                                 CaretBrush="White"
+                                 CaretBrush="#00FF9D"
+                                 SelectionBrush="#B024FF"
                                  TextChanged="SearchInput_TextChanged"
                                  KeyDown="SearchInput_KeyDown"/>
+                    </Grid>
 
-                        <TextBlock IsHitTestVisible="False"
-                                   Text="Search apps..."
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="22,0"
-                                   Foreground="#aaaaaa"
-                                   FontSize="28">
+                    <!-- Placeholder -->
+                    <Grid Margin="20,0" IsHitTestVisible="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text=">" FontFamily="Consolas" FontSize="32" Foreground="#555566" Margin="0,0,15,0" Opacity="0"/>
+                        <TextBlock Grid.Column="1" Text="Search apps..." FontFamily="Consolas" FontSize="32" Foreground="#555566" VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -49,49 +248,84 @@
                             </TextBlock.Style>
                         </TextBlock>
                     </Grid>
-                </Border>
+                </Grid>
+            </Border>
 
-                <Border x:Name="ResultsBorder"
-                        Width="700"
-                        MaxHeight="400"
-                        Background="#FF2D2D30"
-                        CornerRadius="12"
-                        Margin="0,10,0,0"
-                        Visibility="Collapsed">
+            <!-- Results -->
+            <Border x:Name="ResultsBorder"
+                    Background="#CC0F0F1A"
+                    BorderBrush="#B024FF"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Margin="0,15,0,0"
+                    MaxHeight="450"
+                    Visibility="Collapsed"
+                    Effect="{StaticResource PurpleGlow}">
+                
+                <Grid>
+                    <Border Height="30" Background="#151525" VerticalAlignment="Top" CornerRadius="4,4,0,0">
+                        <TextBlock Text="SEARCH_RESULTS" FontFamily="Consolas" FontSize="12" Foreground="#666677" VerticalAlignment="Center" Margin="15,0"/>
+                    </Border>
+
                     <ListBox x:Name="ResultsList"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="White"
-                             FontSize="18"
-                             Padding="10"
+                             Style="{StaticResource RetroListBox}"
+                             Margin="0,30,0,0"
+                             ItemContainerStyle="{StaticResource RetroListItem}"
                              MouseDoubleClick="ResultsList_MouseDoubleClick">
+                        <ListBox.Resources>
+                            <Style TargetType="ScrollBar" BasedOn="{StaticResource NeonScrollBar}"/>
+                        </ListBox.Resources>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="5">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="50"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding Icon}" Width="32" Height="32" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    
+                                    <Border Grid.Column="0" Width="40" Height="40" Background="#1A1A2E" BorderBrush="#00FF9D" BorderThickness="1" CornerRadius="2">
+                                        <Image Source="{Binding Icon}" Width="32" Height="32" Stretch="Uniform" Opacity="0.9"/>
+                                    </Border>
 
-                                    <StackPanel Grid.Column="1">
-                                        <TextBlock Text="{Binding Name}" Foreground="White" FontSize="18" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding Path}" Foreground="Gray" FontSize="11" TextTrimming="CharacterEllipsis"/>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0">
+                                        <TextBlock Text="{Binding Name}" FontFamily="Consolas" FontSize="18" Foreground="#00FF9D" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Path}" FontFamily="Consolas" FontSize="11" Foreground="#666677" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
                                     </StackPanel>
+
+                                    <TextBlock Grid.Column="2" Text="ENTER" FontFamily="Consolas" FontSize="10" Foreground="#B024FF" VerticalAlignment="Center" Margin="0,0,10,0" Opacity="0.6"/>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                </Border>
-            </StackPanel>
-        </Grid>
-        <Button Content="Settings" Canvas.Top="10" Canvas.Right="10" Click="SettingsButton_Click" />
+                </Grid>
+            </Border>
+
+            <!-- Footer -->
+            <Grid Margin="0,15,0,0" Opacity="0.6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="System Ready" FontFamily="Consolas" FontSize="10" Foreground="#00FF9D"/>
+                <TextBlock Grid.Column="1" Text="[ESC] CLOSE  |  [↑↓] NAVIGATE  |  [ENTER] LAUNCH" FontFamily="Consolas" FontSize="10" Foreground="#B024FF"/>
+                <TextBlock Grid.Column="2" Text="v1.0.0" FontFamily="Consolas" FontSize="10" Foreground="#666677" HorizontalAlignment="Right"/>
+            </Grid>
+        </StackPanel>
+
+        <!-- Status -->
         <TextBlock x:Name="StatusText"
-                   Canvas.Bottom="10"
-                   Canvas.Left="0"
-                   Canvas.Right="0"
-                   TextAlignment="Center"
-                   Foreground="Gray"
-                   FontSize="14" />
-    </Canvas>
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,30"
+                   FontFamily="Consolas"
+                   FontSize="12"
+                   Foreground="#B024FF"
+                   Opacity="0.8">
+            <TextBlock.Effect>
+                <DropShadowEffect BlurRadius="5" Color="#B024FF" ShadowDepth="0"/>
+            </TextBlock.Effect>
+        </TextBlock>
+    </Grid>
 </Window>
